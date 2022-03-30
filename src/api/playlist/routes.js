@@ -5,7 +5,7 @@ const routes = (handler) => [
     handler: handler.postPlaylistHandler,
     options: {
       auth: 'songsapp_jwt',
-    } 
+    },
   },
   {
     method: 'GET',
@@ -13,7 +13,7 @@ const routes = (handler) => [
     handler: handler.getAllPlaylistByOwnerHandler,
     options: {
       auth: 'songsapp_jwt',
-    } 
+    },
   },
   {
     method: 'DELETE',
@@ -21,7 +21,7 @@ const routes = (handler) => [
     handler: handler.deleteOwnerPlaylistByIdHandler,
     options: {
       auth: 'songsapp_jwt',
-    } 
+    },
   },
   {
     method: 'POST',
@@ -29,7 +29,7 @@ const routes = (handler) => [
     handler: handler.addSongsToPlaylistHandler,
     options: {
       auth: 'songsapp_jwt',
-    } 
+    },
   },
   {
     method: 'GET',
@@ -37,7 +37,7 @@ const routes = (handler) => [
     handler: handler.getAllSongsInPlaylistHandler,
     options: {
       auth: 'songsapp_jwt',
-    } 
+    },
   },
   {
     method: 'DELETE',
@@ -45,7 +45,7 @@ const routes = (handler) => [
     handler: handler.deleteSongFromPlaylistHandler,
     options: {
       auth: 'songsapp_jwt',
-    } 
+    },
   },
 
 ];
