@@ -43,6 +43,20 @@ class AlbumService {
     return mapTo(result.rows);
   }
 
+  async addCoverAlbum(albumId, filename) {
+    const query = {
+      text: 'update album set coverUrl = $2 where id = $1 returning coverUrl ',
+      values: [albumId, filename],
+    };
+
+    const resultUrl = await this._pool.query(query);
+    if(resultId.rowCount < 1) {
+      throw new NotFoundError('album tidak dapat ditemukan');
+    }
+    return resultUrl
+  }
+
+
   async updateAlbum(albumId, name, value) {
     const query = {
       text: 'update album set name = $2, year = $3 where id = $1 returning id',
