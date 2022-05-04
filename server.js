@@ -47,11 +47,16 @@ const UploadImageService = require('./src/services/storage/uploadService');
 const uploadImageValidator = require('./src/validator/upload');
 const uploadImage = require('./src/api/upload');
 
+// likes plugin module
+const likes = require('./src/api/likes');
+const LikesService = require('./src/services/postgres/LikesService');
+
 const init = async () => {
   const songsService = new SongsService();
   const albumService = new AlbumService();
   const usersService = new UsersService();
   const activityService = new ActivityService();
+  const likesService = new LikesService();
   const authenticationsService = new AuthenticationsService();
   const collaborationService = new CollaborationService();
   const playlistService = new PlaylistService(collaborationService);
@@ -152,6 +157,12 @@ const init = async () => {
         service: uploadImageService,
         validator: uploadImageValidator,
         albumService,
+      }
+    },
+    {
+      plugin: likes,
+      options: {
+        service: likesService,
       }
     }
 
