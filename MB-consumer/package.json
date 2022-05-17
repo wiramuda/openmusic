@@ -1,0 +1,19 @@
+{
+  "name": "mb-consumer",
+  "version": "1.0.0",
+  "description": "consumer code for massage broker fiture",
+  "main": "index.js",
+  "scripts": {
+    "start":"node ./src/consumer.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wiramuda",
+  "license": "ISC",
+  "dependencies": {
+    "amqp": "^0.2.7",
+    "amqplib": "^0.8.0",
+    "dotenv": "^16.0.0",
+    "nodemailer": "^6.7.5",
+    "pg": "^8.7.3"
+  }
+}

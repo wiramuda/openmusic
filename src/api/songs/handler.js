@@ -33,15 +33,8 @@ class SongsHandler {
       });
       response.code(201);
       return response;
-      // client error
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -66,13 +59,7 @@ class SongsHandler {
         },
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -91,13 +78,7 @@ class SongsHandler {
         message: 'lagu berhasil diperbaharui',
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -110,13 +91,7 @@ class SongsHandler {
         message: `lagu berhasil dihapus ${songId}`,
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 }

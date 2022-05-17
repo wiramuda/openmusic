@@ -27,12 +27,7 @@ class AlbumHandler {
         },
       }).code(201);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(400);
-      }
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -47,12 +42,7 @@ class AlbumHandler {
         },
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(404);
-      }
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -67,14 +57,7 @@ class AlbumHandler {
         message: 'album berhasil diperbaharui',
       }).code(200);
     } catch (error) {
-      if (error instanceof InvariantError) {
-        return h.response(error.toString()).code(400);
-      } if (error instanceof NotFoundError) {
-        return h.response(error.toString()).code(404);
-      }
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -88,12 +71,7 @@ class AlbumHandler {
         message: 'album berhasil dihapus',
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(404);
-      }
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 }

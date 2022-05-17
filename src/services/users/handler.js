@@ -28,10 +28,7 @@ class UserHandler {
       response.code(201);
       return response;
     } catch (error) {
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -46,13 +43,7 @@ class UserHandler {
         },
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 }

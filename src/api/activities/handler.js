@@ -24,13 +24,7 @@ class ActivityHandler {
         },
       });
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 }

@@ -19,9 +19,9 @@ const mapDBToModel = ({
   updatedAt: update_at,
 });
 const mapResponse = ({
-  id, title, performer,
+  songid, title, performer,
 }) => ({
-  id, title, performer,
+  id: songid, title, performer,
 });
 
 const activityMap = ({

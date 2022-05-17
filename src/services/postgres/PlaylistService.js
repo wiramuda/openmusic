@@ -97,16 +97,19 @@ class PlaylistService {
 
   async getAllSongsInPlaylist(playlistId, owner) {
     const query = {
-      text: `select s.*, p.owner, p.name 
-                   from playlistsongs ps
-                   right join songs s on ps.songs_id = s.id 
-                   right join playlist p on ps.playlist_id = p.id
-                   left join collaboration c on ps.playlist_id = c.playlist_id
-                   where ps.playlist_id = $1 and p.owner = $2 or c.user_id = $2 and ps.playlist_id = $1
-                   `,
+      text: `select s.id as songId, s.title, s.performer, p.id, p.name, p.owner 
+      from playlistsongs ps
+      right join songs s on ps.songs_id = s.id 
+      right join playlist p on ps.playlist_id = p.id
+      left join collaboration c on ps.playlist_id = c.playlist_id
+      where ps.playlist_id = $1 and p.owner = $2 or c.user_id = $2 and ps.playlist_id = $1
+      `,
       values: [playlistId, owner],
     };
     const result = await this._pool.query(query);
+    if (result.rowCount < 1) {
+      throw new NotFoundError('playlist tidak ditemukan');
+    }
     return result.rows;
   }
 

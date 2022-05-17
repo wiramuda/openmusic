@@ -32,12 +32,14 @@ class AlbumService {
 
   async getAlbum(albumId) {
     const query = {
-      text: 'select a.*, s.id as song_id, s.title from album a left join songs s on a.id = s.album_id where a.id=$1',
+      text: `select a.*, s.id as song_id, s.title 
+             from album a left join songs s on a.id = s.album_id 
+             where a.id=$1`,
       values: [albumId],
     };
     const result = await this._pool.query(query);
     if (result.rowCount < 1) {
-      throw new NotFoundError('album tidak ada');
+      throw new NotFoundError('album tidak dapat ditemukan');
     }
 
     return mapTo(result.rows);
@@ -45,17 +47,16 @@ class AlbumService {
 
   async addCoverAlbum(albumId, filename) {
     const query = {
-      text: 'update album set coverUrl = $2 where id = $1 returning coverUrl ',
+      text: 'update album set cover = $2 where id = $1 returning cover',
       values: [albumId, filename],
     };
 
     const resultUrl = await this._pool.query(query);
-    if(resultId.rowCount < 1) {
+    if (resultUrl.rowCount < 1) {
       throw new NotFoundError('album tidak dapat ditemukan');
     }
-    return resultUrl
+    return resultUrl.rows[0];
   }
-
 
   async updateAlbum(albumId, name, value) {
     const query = {

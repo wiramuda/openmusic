@@ -30,18 +30,7 @@ class AuthenticationsHandler {
         },
       }).code(201);
     } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -58,12 +47,7 @@ class AuthenticationsHandler {
         },
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -76,18 +60,7 @@ class AuthenticationsHandler {
         message: 'refresh token berhasil dihapus',
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 }

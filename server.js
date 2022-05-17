@@ -1,6 +1,8 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const jwt = require('@hapi/jwt');
+const path = require('path');
+const Inert = require('@hapi/inert');
 
 // songs plugin module
 const songs = require('./src/api/songs');
@@ -13,7 +15,7 @@ const AlbumService = require('./src/services/postgres/AlbumService');
 const AlbumValidator = require('./src/validator/album');
 
 // users plugin module
-const users = require('./src/api/users');
+const users = require('./src/services/users');
 const UsersService = require('./src/services/postgres/UserService');
 const UsersValidator = require('./src/validator/users');
 
@@ -38,30 +40,35 @@ const activity = require('./src/api/activities');
 const ActivityService = require('./src/services/postgres/ActivityService');
 
 // exports plugin module
-const ExportValidator = require('./src/validator/exports');
+const { ExportValidator } = require('./src/validator/exports');
 const ProducerService = require('./src/services/rabbitmq/producerService');
-const exports = require('./src/api/exports');
+const exportsApi = require('./src/api/exports');
 
 // storage plugin module
 const UploadImageService = require('./src/services/storage/uploadService');
-const uploadImageValidator = require('./src/validator/upload');
+const UploadValidator = require('./src/validator/upload');
 const uploadImage = require('./src/api/upload');
 
 // likes plugin module
 const likes = require('./src/api/likes');
 const LikesService = require('./src/services/postgres/LikesService');
 
+// cache service
+const CacheService = require('./src/services/redis/CacheService');
+
+const ClientError = require('./src/exception/ClientError');
+
 const init = async () => {
+  const cacheService = new CacheService();
   const songsService = new SongsService();
   const albumService = new AlbumService();
   const usersService = new UsersService();
   const activityService = new ActivityService();
-  const likesService = new LikesService();
+  const likesService = new LikesService(cacheService);
   const authenticationsService = new AuthenticationsService();
   const collaborationService = new CollaborationService();
   const playlistService = new PlaylistService(collaborationService);
-  const uploadImageService = new UploadImageService(path.resolve(__dirname,'api/file/cover'));
-
+  const uploadImageService = new UploadImageService(path.resolve(__dirname, 'src/api/upload/file/cover'));
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -72,7 +79,14 @@ const init = async () => {
     },
   });
 
-  await server.register(jwt);
+  await server.register([
+    {
+      plugin: jwt,
+    },
+    {
+      plugin: Inert,
+    },
+  ]);
 
   server.auth.strategy('songsapp_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
@@ -145,28 +159,45 @@ const init = async () => {
       },
     },
     {
-      plugin: exports,
+      plugin: exportsApi,
       options: {
         service: ProducerService,
         validator: ExportValidator,
-      }
+        playlistService,
+      },
     },
     {
       plugin: uploadImage,
       options: {
         service: uploadImageService,
-        validator: uploadImageValidator,
+        validator: UploadValidator,
         albumService,
-      }
+      },
     },
     {
       plugin: likes,
       options: {
         service: likesService,
-      }
-    }
+        albumService,
+      },
+    },
 
   ]);
+  server.ext('onPreResponse', (request, h) => {
+    // mendapatkan konteks response dari request
+    const { response } = request;
+    if (response instanceof ClientError) {
+      // membuat response baru dari response toolkit sesuai kebutuhan error handling
+      const newResponse = h.response({
+        status: 'fail',
+        message: response.message,
+      });
+      newResponse.code(response.statusCode);
+      return newResponse;
+    }
+    // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
+    return response.continue || response;
+  });
   await server.start();
   console.log(`server berjalan pada ${server.info.uri}`);
 };

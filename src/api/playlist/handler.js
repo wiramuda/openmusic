@@ -36,13 +36,7 @@ class PlaylistHandler {
       response.code(201);
       return response;
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -59,13 +53,7 @@ class PlaylistHandler {
       response.code(200);
       return response;
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -82,13 +70,7 @@ class PlaylistHandler {
       response.code(200);
       return response;
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -109,13 +91,7 @@ class PlaylistHandler {
       response.code(201);
       return response;
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -138,13 +114,7 @@ class PlaylistHandler {
         },
       }).code(200);
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 
@@ -164,13 +134,7 @@ class PlaylistHandler {
       response.code(200);
       return response;
     } catch (error) {
-      if (error instanceof ClientError) {
-        return h.response(error.toString()).code(error.statusCode);
-      }
-      // server error
-      console.log(error);
-      return h.response(new ServerError('server sedanng error').toString())
-        .code(500);
+      return error;
     }
   }
 }

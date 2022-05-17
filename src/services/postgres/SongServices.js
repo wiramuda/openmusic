@@ -31,21 +31,21 @@ class SongsService {
 
   async getSongs(filter) {
     const query = {
-      text: 'select * from songs',
+      text: 'select s.id as songId, s.title, s.performer from songs as s',
     };
 
     if (filter.title && filter.performer) {
-      query.text = 'select * from songs where lower(title) like $1 and lower(performer) like $2;';
+      query.text = 'select s.id as songId, s.title, s.performer from songs as s where lower(title) like $1 and lower(performer) like $2;';
       query.values = [`${filter.title}%`, `${filter.performer}%`];
     }
 
     if (filter.title && !filter.performer) {
-      query.text = 'select * from songs where lower(title) like $1;';
+      query.text = 'select s.id as songId, s.title, s.performer from songs as s where lower(title) like $1;';
       query.values = [`${filter.title}%`];
     }
 
     if (filter.performer && !filter.title) {
-      query.text = 'select * from songs where lower(performer) like $1;';
+      query.text = 'select s.id as songId, s.title, s.performer from songs as s where lower(performer) like $1;';
       query.values = [`${filter.performer}%`];
     }
 
@@ -64,7 +64,6 @@ class SongsService {
     if (result.rowCount < 1) {
       throw new NotFoundError(`lagu tidak ditemukan ${id}`);
     }
-
     return result.rows.map(mapDBToModel)[0];
   }
 
